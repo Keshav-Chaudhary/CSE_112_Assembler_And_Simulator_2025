@@ -23,7 +23,7 @@ def ovr_write_to_bin():
 
 def read_instructions(pc): 
     # Retrieves the instruction at the current program counter (pc).
-    # Why? - In an assembler, instructions need to be processed sequentially starting from a specific memory address.
+    
     temp = assembly[pc]
     return temp
 
@@ -86,12 +86,45 @@ def funct7(x):
     # Logic will be added here to return funct7 value or error
 
 def register_code(x):
-    test = None
-    # Converts register names to their corresponding binary representation.
-    # Why? - In the RISC-V architecture, registers are represented by 5-bit binary values 
-    # to identify the operands in the instruction (e.g., x0 for zero register).
-    # If reg = zero then 00000, if reg = ra then 00001, and so on
-    # Logic will be added here to convert register names to binary representation
+    registers_dict={
+    'zero': '00000',
+    'ra':   '00001',
+    'sp':   '00010',
+    'gp':   '00011',
+    'tp':   '00100',
+    't0':   '00101',
+    't1':   '00110',
+    't2':   '00111',
+    's0':   '01000',
+    's1':   '01001',
+    'a0':   '01010',
+    'a1':   '01011',
+    'a2':   '01100',
+    'a3':   '01101',
+    'a4':   '01110',
+    'a5':   '01111',
+    'a6':   '10000',
+    'a7':   '10001',
+    's2':   '10010',
+    's3':   '10011',
+    's4':   '10100',
+    's5':   '10101',
+    's6':   '10110',
+    's7':   '10111',
+    's8':   '11000',
+    's9':   '11001',
+    's10':   '11010',
+    's11':   '11011',
+    't3':   '11100',
+    't4':   '11101',
+    't5':   '11110',
+    't6':   '11111',
+    }
+    if x in registers_dict:
+        return registers_dict[x]  
+    return 'error'
+    
+
 
 # def complement(a):
 #     # Computes the complement of a binary digit.
