@@ -8,16 +8,11 @@ file_output = sys.argv[2] # output file
 # 0000000 10011 10010 000 01001 0110011
 
 def write_to_bin(bineq): 
-    # Writes the binary encoded instruction to the output file.
-    # Why? - The assembler needs to store the generated machine code in a binary format 
-    # for further execution or testing.
     bincode = open(file_output, '+a')
     bincode.write(str(bineq))
     bincode.close()
 
 def ovr_write_to_bin():
-    # Overwrites the output file with an empty content at the start of the process.
-    # Why? - This ensures the output file is clean before starting to write the new binary code.
     bincode = open(file_output, '+w')
     bincode.close()
 
@@ -91,22 +86,21 @@ def register_code(x):
     # If reg = zero then 00000, if reg = ra then 00001, and so on
     # Logic will be added here to convert register names to binary representation
 
-# def complement(a):
-#     # Computes the complement of a binary digit.
-#     # Why? - Used in two's complement operations, which is essential for handling signed numbers in binary.
-#     # If a = 1 then 0, if a = 0 then 1
-#     # Logic will be added here to return the complement
+def compute_2s_complement(binary_str):
+    flipped = ''.join('1' if bit == '0' else '0' for bit in binary_str)
+    binary = bin(int(flipped, 2) + 1)[2:]
+    return binary.zfill(len(binary_str))
+#print(compute_2s_complement('00010111'))
 
-# def compute_2s_complement(a):
-#     # Computes the two's complement of a given binary string.
-#     # Why? - Two's complement is essential for arithmetic operations with negative numbers.
-#     # Logic will be added here to return two's complement of the input binary string
-
-# def converion_to_bits(a):
-#     # Converts a decimal number to binary.
-#     # Why? - Assembly instructions require both immediate values (e.g., offsets) and register values 
-#     # to be represented in binary format for proper encoding.
-#     # Logic will be added here to convert decimal numbers to binary
+def conversion_to_bits(a):
+    if a == 0:
+        return "0" 
+    bits = []
+    while a:
+        bits.append(str(a % 2))
+        a //= 2
+    return ''.join(bits[::-1])
+# print(converion_to_bits(256))
 
 def imm(x, opco):
     test = None
