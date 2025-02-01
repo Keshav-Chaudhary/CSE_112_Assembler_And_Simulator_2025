@@ -28,21 +28,47 @@ def read_instructions(pc):
     return temp
 
 def opcode(instype):
-    R_type = ['add', 'sub', 'slt', 'sltu', 'xor', 'sll', 'srl', 'or', 'and']
-    I_type = ['lw', 'addi', 'sltiu', 'jalr']
+    R_type = ['add', 'sub', 'slt', 'srl', 'or', 'and']
+    I_type = ['lw', 'addi', 'jalr']
     S_type = ['sw']
     B_type = ['beq', 'bne', 'blt', 'bge', 'bltu', 'bgeu']
     U_type = ['lui', 'auipc']
     J_type = ['jal']
     
     opcodes = {
-        'add': '0110011', 'sub': '0110011', 'slt': '0110011', 'sltu': '0110011', 
-        'xor': '0110011', 'sll': '0110011', 'srl': '0110011', 'or': '0110011', 'and': '0110011',
-        'lw': '0000011', 'addi': '0010011', 'sltiu': '0010011', 'jalr': '1100111',
+        # R Type
+        'add': '0110011', 
+        'sub': '0110011', 
+        'slt': '0110011', 
+        'and': '0110011',
+        'or': '0110011', 
+        'srl': '0110011', 
+        # 'sltu': '0110011', 
+        # 'xor': '0110011', 
+        # 'sll': '0110011', 
+
+        # I Type
+        'lw': '0000011', 
+        'addi': '0010011', 
+        'jalr': '1100111',
+        # 'sltiu': '0010011', 
+
+        # S Type
         'sw': '0100011',
-        'beq': '1100011', 'bne': '1100011', 'blt': '1100011', 'bge': '1100011', 
-        'bltu': '1100011', 'bgeu': '1100011',
-        'lui': '0110111', 'auipc': '0010111',
+
+        # B Type
+        'beq': '1100011', 
+        'bne': '1100011', 
+        'blt': '1100011', 
+        # 'bge': '1100011', 
+        # 'bltu': '1100011', 
+        # 'bgeu': '1100011',
+
+        # U Type
+        # 'lui': '0110111', 
+        # 'auipc': '0010111',
+
+        # J Type
         'jal': '1101111'
     }
     
@@ -92,11 +118,13 @@ def register_code(x):
 #     # Logic will be added here to convert decimal numbers to binary
 
 def imm(x, opco):
+    test = None
     # Converts decimal immediate values into their appropriate binary representation based on the instruction type.
     # Why? - Immediate values are used in instructions like I-type, and need to be converted to binary for encoding.
     # Logic will be added here for converting immediate values to binary
 
 def processor_labels(assembly):
+    test = None
     # Processes labels in the assembly code and replaces them with memory addresses or relative offsets.
     # Why? - Labels are used in assembly language for easy references to locations, and 
     # they need to be converted to actual memory addresses or offsets before encoding.
