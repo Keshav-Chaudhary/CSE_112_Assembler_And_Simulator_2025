@@ -65,12 +65,39 @@ def opcode(instype):
     return 'error'
 
 def funct3(x):
-    test = None
-    # Determines the funct3 field for certain instruction types (like R-type).
-    # Why? - The funct3 helps further define the operation within a given opcode type, 
-    # often distinguishing between variations of operations (like add, sub, etc.).
-    # lx0 , lx1 , lx2 , lx3 , lx4 , lx5 , lx6 , lx7 , null
-    # Logic will be added here to return funct3 value or error
+    funct3_dict = {
+        # R Type
+        'add': '000',
+        'sub': '000',
+        'slt': '010',
+        'srl': '101',
+        'or': '110',
+        'and': '111',
+
+        # I Type
+        'lw': '010',
+        'addi': '000',
+        'jalr': '000',
+
+        # S Type
+        'sw': '010',
+
+        # B Type
+        'beq': '000',
+        'bne': '001',
+        'blt': '100',
+
+        # J Type
+        'jal': '000',
+
+        # U Type
+        'lui': '000',
+        'auipc': '000'
+    }
+    
+    if x in funct3_dict:
+        return funct3_dict[x]
+    return 'error'
 
 def funct7(x):
     test = None
