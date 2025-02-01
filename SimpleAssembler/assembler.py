@@ -31,8 +31,8 @@ def opcode(instype):
     R_type = ['add', 'sub', 'slt', 'srl', 'or', 'and']
     I_type = ['lw', 'addi', 'jalr']
     S_type = ['sw']
-    B_type = ['beq', 'bne', 'blt', 'bge', 'bltu', 'bgeu']
-    U_type = ['lui', 'auipc']
+    B_type = ['beq', 'bne', 'blt']
+    # U_type = ['lui', 'auipc']
     J_type = ['jal']
     
     opcodes = {
