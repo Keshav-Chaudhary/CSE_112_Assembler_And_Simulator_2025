@@ -28,23 +28,30 @@ def read_instructions(pc):
     return temp
 
 def opcode(instype):
-    # Determines the opcode based on the instruction type (e.g., R-type, I-type).
-    # Why? - The opcode is a key part of the instruction that determines which operation 
-    # the processor will perform (such as arithmetic, logical, or control).
-    R_type = 
-    I_type1 = 
-    I_type2 = 
-    I_type3 = 
-    S_type = 
-    B_type = 
-    U_type1 = 
-    U_type2 = 
-    J_type = 
-    # and more 
-    # Logic for identifying the opcode will be added here
-    # Does return opcode (string) if found, else return error (string)
+    R_type = ['add', 'sub', 'slt', 'sltu', 'xor', 'sll', 'srl', 'or', 'and']
+    I_type = ['lw', 'addi', 'sltiu', 'jalr']
+    S_type = ['sw']
+    B_type = ['beq', 'bne', 'blt', 'bge', 'bltu', 'bgeu']
+    U_type = ['lui', 'auipc']
+    J_type = ['jal']
+    
+    opcodes = {
+        'add': '0110011', 'sub': '0110011', 'slt': '0110011', 'sltu': '0110011', 
+        'xor': '0110011', 'sll': '0110011', 'srl': '0110011', 'or': '0110011', 'and': '0110011',
+        'lw': '0000011', 'addi': '0010011', 'sltiu': '0010011', 'jalr': '1100111',
+        'sw': '0100011',
+        'beq': '1100011', 'bne': '1100011', 'blt': '1100011', 'bge': '1100011', 
+        'bltu': '1100011', 'bgeu': '1100011',
+        'lui': '0110111', 'auipc': '0010111',
+        'jal': '1101111'
+    }
+    
+    if instype in opcodes:
+        return opcodes[instype]
+    return 'wrong instruction'
 
 def funct3(x):
+    test = None
     # Determines the funct3 field for certain instruction types (like R-type).
     # Why? - The funct3 helps further define the operation within a given opcode type, 
     # often distinguishing between variations of operations (like add, sub, etc.).
@@ -52,6 +59,7 @@ def funct3(x):
     # Logic will be added here to return funct3 value or error
 
 def funct7(x):
+    test = None
     # Determines the funct7 field for certain instruction types (like R-type).
     # Why? - The funct7 is used for more complex instruction formats (like shifts or divides), 
     # and helps refine the operation the processor performs.
@@ -59,6 +67,7 @@ def funct7(x):
     # Logic will be added here to return funct7 value or error
 
 def register_code(x):
+    test = None
     # Converts register names to their corresponding binary representation.
     # Why? - In the RISC-V architecture, registers are represented by 5-bit binary values 
     # to identify the operands in the instruction (e.g., x0 for zero register).
