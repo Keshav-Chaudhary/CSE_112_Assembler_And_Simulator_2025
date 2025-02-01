@@ -33,6 +33,7 @@ def opcode(instype):
     S_type = ['sw']
     B_type = ['beq', 'bne', 'blt']
     J_type = ['jal']
+    U_type = ['lui', 'auipc']
     
     opcodes = {
         # R Type
@@ -42,15 +43,11 @@ def opcode(instype):
         'and': '0110011',
         'or': '0110011', 
         'srl': '0110011', 
-        # 'sltu': '0110011', 
-        # 'xor': '0110011', 
-        # 'sll': '0110011', 
 
         # I Type
         'lw': '0000011', 
         'addi': '0010011', 
         'jalr': '1100111',
-        # 'sltiu': '0010011', 
 
         # S Type
         'sw': '0100011',
@@ -59,17 +56,18 @@ def opcode(instype):
         'beq': '1100011', 
         'bne': '1100011', 
         'blt': '1100011', 
-        # 'bge': '1100011', 
-        # 'bltu': '1100011', 
-        # 'bgeu': '1100011',
 
         # J Type
-        'jal': '1101111'
+        'jal': '1101111',
+
+        # U Type
+        'lui': '0110111',
+        'auipc': '0010111'
     }
     
     if instype in opcodes:
         return opcodes[instype]
-    return 'wrong instruction'
+    return 'error'
 
 def funct3(x):
     test = None
