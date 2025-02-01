@@ -32,7 +32,6 @@ def opcode(instype):
     I_type = ['lw', 'addi', 'jalr']
     S_type = ['sw']
     B_type = ['beq', 'bne', 'blt']
-    # U_type = ['lui', 'auipc']
     J_type = ['jal']
     
     opcodes = {
@@ -63,10 +62,6 @@ def opcode(instype):
         # 'bge': '1100011', 
         # 'bltu': '1100011', 
         # 'bgeu': '1100011',
-
-        # U Type
-        # 'lui': '0110111', 
-        # 'auipc': '0010111',
 
         # J Type
         'jal': '1101111'
