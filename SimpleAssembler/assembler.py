@@ -22,8 +22,6 @@ def ovr_write_to_bin():
     bincode.close()
 
 def read_instructions(pc): 
-    # Retrieves the instruction at the current program counter (pc).
-    # Why? - In an assembler, instructions need to be processed sequentially starting from a specific memory address.
     temp = assembly[pc]
     return temp
 
