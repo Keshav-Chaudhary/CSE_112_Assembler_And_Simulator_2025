@@ -154,21 +154,27 @@ def register_code(x):
     
 
 
-def compute_2s_complement(binary_str):
+def compute_2s_complement(binary_str, length):
     flipped = ''.join('1' if bit == '0' else '0' for bit in binary_str)
-    binary = bin(int(flipped, 2) + 1)[2:]
-    return binary.zfill(len(binary_str))
-#print(compute_2s_complement('00010111'))
+    binary = bin(int(flipped, 2) + 1)[2:] 
+    return binary.zfill(length)
+#print(compute_2s_complement((conversion_to_bits(256,12)),10))
 
-def conversion_to_bits(a):
-    if a == 0:
-        return "0" 
+def conversion_to_bits(num, length):
+    if num == 0:
+        return "0" * length 
     bits = []
-    while a:
-        bits.append(str(a % 2))
-        a //= 2
-    return ''.join(bits[::-1])
-# print(converion_to_bits(256))
+    while num:
+        bits.append(str(num % 2))
+        num //= 2
+    
+    binary_str = ''.join(bits[::-1])
+    if len(binary_str) < length:
+        binary_str = binary_str.rjust(length, '0')
+    elif len(binary_str) > length:
+        binary_str = binary_str[-length:]
+    return binary_str
+# print(converion_to_bits(256,12))
 
 def imm(x, opco):
     test = None
@@ -190,5 +196,5 @@ with open(fname, 'r') as a:
 assembly = processor_labels(assembly)
 ovr_write_to_bin()
 
-# The above part is the main part that includes all the required functions for the assembler.
-# the rest of the code will be for bonus part 
+# The above part is the main fucntions that includes all the required functions for the assembler.
+# the rest of the code will be for bonus part and the main logic 
