@@ -62,7 +62,7 @@ def opcode(x):
     
     if x in opc:
         return opc[x]
-    return ''
+    return 'error'
 
 def funct3(x):
     funct3 = {
