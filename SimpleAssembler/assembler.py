@@ -22,7 +22,7 @@ def read_instructions(pc):
     temp = assembly[pc]
     return temp
 
-def opcode(instype):
+def opcode(x):
     R_type = ['add', 'sub', 'slt', 'srl', 'or', 'and']
     I_type = ['lw', 'addi', 'jalr']
     S_type = ['sw']
@@ -30,7 +30,7 @@ def opcode(instype):
     J_type = ['jal']
     U_type = ['lui', 'auipc']
     
-    opcodes = {
+    opc = {
         # R Type
         'add': '0110011', 
         'sub': '0110011', 
@@ -60,8 +60,8 @@ def opcode(instype):
         'auipc': '0010111'
     }
     
-    if instype in opcodes:
-        return opcodes[instype]
+    if x in opc:
+        return opc[instype]
     return 'error'
 
 def funct3(x):
@@ -106,6 +106,18 @@ def funct7(x):
     # and helps refine the operation the processor performs.
     # lx0 , lx1 , null
     # Logic will be added here to return funct7 value or error
+    f7 = {
+        'add': '0000000',
+        'sub': '0100000',
+        'slt': '0000000',
+        'srl': '0000000',
+        'or': '0000000',
+        'and': '0000000'
+    }
+    
+    if x in f7:
+        return f7[x]
+    return 'error'
 
 def register_code(x):
     registers_dict={
