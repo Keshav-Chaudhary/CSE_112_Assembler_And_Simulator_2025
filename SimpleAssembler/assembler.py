@@ -22,12 +22,12 @@ def read_instructions(pc):
     return temp
 
 def opcode(x):
-    R_type = ['add', 'sub', 'slt', 'srl', 'or', 'and']
-    I_type = ['lw', 'addi', 'jalr']
-    S_type = ['sw']
-    B_type = ['beq', 'bne', 'blt']
-    J_type = ['jal']
-    U_type = ['lui', 'auipc']
+    R = ['add', 'sub', 'slt', 'srl', 'or', 'and']
+    I = ['lw', 'addi', 'jalr']
+    S = ['sw']
+    B = ['beq', 'bne', 'blt']
+    J = ['jal']
+    U = ['lui', 'auipc']
     
     opc = {
         # R Type
@@ -62,6 +62,11 @@ def opcode(x):
     if x in opc:
         return opc[x]
     return 'error'
+
+# def test_opcode():
+#     assert opcode('add') == '0110011'
+#     assert opcode('lw') == '0000011'
+#     assert opcode('invalid') == 'error'
 
 def funct3(x):
     funct3 = {
@@ -98,19 +103,38 @@ def funct3(x):
         return funct3[x]
     return ''
 
+# def test_funct3():
+#     assert funct3('add') == '000'
+#     assert funct3('lw') == '010'
+#     assert funct3('abcde') == ''
+
 def funct7(x):
     f7 = {
         'add': '0000000',
+
         'sub': '0100000',
+
         'slt': '0000000',
+
         'srl': '0000000',
+
         'or': '0000000',
+
         'and': '0000000'
     }
     
     if x in f7:
         return f7[x]
     return ''
+
+# def test_funct7():
+#     assert funct7('add') == '0000000'
+#     assert funct7('sub') == '0100000'
+#     assert funct7('invalid') == ''
+
+# test_opcode()
+# test_funct3()
+# test_funct7()
 
 def register_code(x):
     registers_dict={
