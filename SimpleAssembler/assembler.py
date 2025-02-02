@@ -65,7 +65,7 @@ def opcode(x):
     return 'error'
 
 def funct3(x):
-    funct3_dict = {
+    funct3 = {
         # R Type
         'add': '000',
         'sub': '000',
@@ -95,17 +95,11 @@ def funct3(x):
         'auipc': '000'
     }
     
-    if x in funct3_dict:
-        return funct3_dict[x]
-    return 'error'
+    if x in funct3:
+        return funct3[x]
+    return ''
 
 def funct7(x):
-    test = None
-    # Determines the funct7 field for certain instruction types (like R-type).
-    # Why? - The funct7 is used for more complex instruction formats (like shifts or divides), 
-    # and helps refine the operation the processor performs.
-    # lx0 , lx1 , null
-    # Logic will be added here to return funct7 value or error
     f7 = {
         'add': '0000000',
         'sub': '0100000',
@@ -117,7 +111,7 @@ def funct7(x):
     
     if x in f7:
         return f7[x]
-    return 'error'
+    return ''
 
 def register_code(x):
     registers_dict={
