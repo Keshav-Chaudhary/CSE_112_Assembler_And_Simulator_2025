@@ -177,10 +177,60 @@ def conversion_to_bits(num, length):
 # print(converion_to_bits(256,12))
 
 def imm(x, opco):
-    test = None
-    # Converts decimal immediate values into their appropriate binary representation based on the instruction type.
-    # Why? - Immediate values are used in instructions like I-type, and need to be converted to binary for encoding.
-    # Logic will be added here for converting immediate values to binary
+    num = int(num)
+    if opco in ["0000011", "0010011", "1100111"]:
+        bit_length = 12
+        binary = conversion_to_bits(abs(num), bit_length)
+        if num < 0:
+            binary = compute_2s_complement(binary, bit_length)
+        if len(binary) > bit_length:
+            return '-1'
+        return binary
+
+    elif opco in ["1100011"]:
+        bit_length = 13
+        binary = conversion_to_bits(abs(num), bit_length)
+        if num < 0:
+            binary = compute_2s_complement(binary, bit_length)
+        if len(binary) > bit_length:
+            return '-1'
+        y = binary[0] + binary[2:8]
+        z = binary[8:12] + binary[1]
+        return y, z
+
+    elif opco in ["0110111", "0010111"]:
+        bit_length = 32
+        binary = conversion_to_bits(abs(num), bit_length)
+        if num < 0:
+            binary = compute_2s_complement(binary, bit_length)
+        if len(binary) > bit_length:
+            return '-1'
+        return binary[:20]
+
+    elif opco in ["0100011"]:
+        bit_length = 12
+        binary = conversion_to_bits(abs(num), bit_length)
+        if num < 0:
+            binary = compute_2s_complement(binary, bit_length)
+        if len(binary) > bit_length:
+            return '-1'
+        return binary[:7], binary[7:]
+
+    elif opco in ["1101111"]:
+        bit_length = 21
+        binary = conversion_to_bits(abs(num), bit_length)
+        if num < 0:
+            binary = compute_2s_complement(binary, bit_length)
+        if len(binary) > bit_length:
+            return '-1'
+        binary = binary[0] + binary[10:20] + binary[9] + binary[1:9]
+        return binary
+#print(imm(5, '1101111'))
+#print(imm(3, '1100011'))
+#print(imm(5, '0110111'))
+#print(imm(5, '0100011'))
+#print(imm(5, '1101111'))
+
 
 def processor_labels(assembly):
     test = None
