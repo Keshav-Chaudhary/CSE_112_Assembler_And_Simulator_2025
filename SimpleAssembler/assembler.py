@@ -61,7 +61,7 @@ def opcode(x):
     }
     
     if x in opc:
-        return opc[instype]
+        return opc[x]
     return 'error'
 
 def funct3(x):
