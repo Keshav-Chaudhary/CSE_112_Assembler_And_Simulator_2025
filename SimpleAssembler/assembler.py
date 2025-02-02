@@ -1,4 +1,5 @@
 import sys # for command line arguments
+import re
 file_input = sys.argv[1] # input file
 file_output = sys.argv[2] # output file
  
@@ -17,8 +18,6 @@ def ovr_write_to_bin():
     bincode.close()
 
 def read_instructions(pc): 
-    # Retrieves the instruction at the current program counter (pc).
-    # Why? - In an assembler, instructions need to be processed sequentially starting from a specific memory address.
     temp = assembly[pc]
     return temp
 
@@ -233,11 +232,30 @@ def imm(x, opco):
 
 
 def processor_labels(assembly):
-    test = None
-    # Processes labels in the assembly code and replaces them with memory addresses or relative offsets.
-    # Why? - Labels are used in assembly language for easy references to locations, and 
-    # they need to be converted to actual memory addresses or offsets before encoding.
-    # Logic will be added here for processing labels and replacing them with addresses
+    label_dict = {}
+    
+    for i in range(len(assembly)):
+        assembly[i] = assembly[i].lstrip() 
+        
+        match = re.match(r'(\w+):\s*(.*)', assembly[i])
+        if match:
+            label_dict[match.group(1)] = i * 4
+            assembly[i] = match.group(2)
+
+        for label, address in label_dict.items():
+            if label in assembly[i]:
+                assembly[i] = assembly[i].replace(label, str(address - (i * 4)))
+
+    return assembly
+# assembly1 = [
+#     "label1: ADD R1, R2, R3",
+#     "SUB R4, R5, R6",
+#     "label2: MUL R7, R8, R9",
+#     "BEQ R1, R2, label1"
+# ]
+# expected1 =['ADD R1, R2, R3', 'SUB R4, R5, R6', 'MUL R7, R8, R9', 'BEQ R1, R2, -12']
+# print(processor_labels(assembly1)==expected1) -- > True 
+
 
 fname = file_input
 
