@@ -281,7 +281,9 @@ fname = file_input
 with open(fname, 'r') as a:
     assembly = [line.strip('\n') for line in a if line.strip()]
 assembly = processor_labels(assembly)
+
 ovr_write_to_bin()
 
 # The above part is the main fucntions that includes all the required functions for the assembler.
 # the rest of the code will be for bonus part and the main logic.
+
