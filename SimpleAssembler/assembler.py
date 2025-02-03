@@ -316,3 +316,101 @@ ovr_write_to_bin()
 # The above part is the main fucntions that includes all the required functions for the assembler.
 # the rest of the code will be for bonus part and the main logic.
 
+bonus_opcodes = {
+    "rst": "1010101",
+    "mul": "1010110",
+    "halt": "1011101",
+    "rvrs": "1011111"
+}
+cnt = 0
+bonus_list = ["mul", "rst", "halt", "rvrs"]
+while cnt != len(assembly):
+    inst = read_instructions(cnt).split()
+    # print('Current Line : ', inst)
+    cnt += 1
+    
+    if inst[0] in ['rst', 'halt']: # bonus insts.
+        inst = [inst[0]]
+    else:
+        inst = [inst[0]] + inst[1].split(',')
+    
+    opco = opcode(inst[0]) # give equivalent opcode
+
+    if inst[0] in bonus_list:
+        opco = bonus_opcodes.get(inst[0], opco)
+    
+    # Check if the virtual halt instruction is missing
+    if "beq zero,zero,0" not in assembly:
+        write_to_bin('Missing Virtual Halt')
+        print('Missing Virtual Halt')
+        break
+
+    # print(f'Opcode of Instruction {inst[0]} : ', opco)
+    # print('Formated Instruction : ', inst)
+    # print(opco) #0010011
+    # print(repr(opco))
+    # print(len(opco))
+
+    # CASE 1 when opcode is 0010011 and instruction is beq 
+    # Instruction beq zero,zero,0
+    # output : 00000000000000000000000001100011
+    if opco == "1100011" and inst == ['beq', 'zero', 'zero', '0']:
+        try:
+            imm_value, imm_type = imm(inst[3], opco)
+            reg1_code = register_code(inst[2])
+            reg2_code = register_code(inst[1])
+            funct3_value = funct3(inst[0])
+
+            bineq = imm_value + reg2_code + reg1_code + funct3_value + imm_type + opco
+            
+            if 'error' in bineq:
+                write_to_bin('at line', cnt, 'Invalid Register Name')
+                print(f'at line {cnt} Invalid Register Name')
+                break
+            elif '-1' in bineq:
+                write_to_bin('at line', cnt, 'Invalid Imm Value')
+                print(f'at line {cnt} Invalid Imm Value')
+                break
+            
+            write_to_bin(bineq + ('\n' if cnt != len(assembly) else ''))
+            
+        except ValueError as e:
+            print(f'Invalid Instruction at line {cnt}: {e}')
+            break
+
+    # CASE 2 when opcode is 0010011 and instruction is addi 
+    # instruction : addi a0,zero,-5
+    # output : 11111111101100000000010100010011
+
+    if opco == '0010011':  # Check for a specific opcode
+        imm_value = imm(inst[3], opco)
+        # print("imm_value:", imm_value)
+
+        try:
+            # Prepare the binary instruction
+            bineq = imm(inst[3], opco) + register_code(inst[2]) + funct3(inst[0]) + register_code(inst[1]) + opco
+            # print("immideate value", imm(inst[3], opco))
+            # print("register code", register_code(inst[2]))
+            # print("funct3", funct3(inst[0]))
+            # print("register code", register_code(inst[1]))
+            # print("opco", opco)
+            # print(bineq)
+            
+            if 'error' in bineq:
+                write_to_bin(f'at line {cnt} Invalid Register Name')
+                print(f'at line {cnt} Invalid Register Name')
+                break
+            elif '-1' in bineq:
+                write_to_bin(f'at line {cnt} Invalid Imm Value')
+                print(f'at line {cnt} Invalid Imm Value')
+                break
+            elif cnt == len(assembly):
+                write_to_bin(bineq+ ('\n' if cnt != len(assembly) else ''))
+            else:
+                write_to_bin(bineq+ ('\n' if cnt != len(assembly) else ''))
+        except Exception:
+            print('Invalid Instruction')
+            break
+    # To be continued
+
+
