@@ -1,8 +1,7 @@
 import sys # for command line arguments
 import re
 file_input = sys.argv[1] # input file
-file_output = sys.argv[2] # output file
- 
+file_output = sys.argv[2] # output file 
 # RISC-V encoding format
 # [31:25] [24:20] [19:15] [14:12] [11:7] [6:0] Instruction
 # funct7 s3 s2 add s1 opcode add
@@ -109,17 +108,13 @@ def funct3(x):
 #     assert funct3('abcde') == ''
 
 def funct7(x):
+    
     f7 = {
         'add': '0000000',
-
         'sub': '0100000',
-
         'slt': '0000000',
-
         'srl': '0000000',
-
         'or': '0000000',
-
         'and': '0000000'
     }
     
@@ -174,7 +169,7 @@ def register_code(x):
     if x in registers_dict:
         return registers_dict[x]  
     return 'error'
-    
+#print(register_code('s9'))  
 
 
 def compute_2s_complement(binary_str, length):
@@ -289,4 +284,4 @@ assembly = processor_labels(assembly)
 ovr_write_to_bin()
 
 # The above part is the main fucntions that includes all the required functions for the assembler.
-# the rest of the code will be for bonus part and the main logic 
+# the rest of the code will be for bonus part and the main logic.
