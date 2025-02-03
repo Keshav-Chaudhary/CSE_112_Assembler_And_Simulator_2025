@@ -129,7 +129,7 @@ def funct3(x):
         return j_type[x]
     elif x in u_type:
         return u_type[x]
-    return ''
+    return 'error'
 
 # def test_funct3():
 #     assert funct3('add') == '000'
@@ -149,7 +149,7 @@ def funct7(x):
     
     if x in f7:
         return f7[x]
-    return ''
+    return 'error'
 
 # def test_funct7():
 #     assert funct7('add') == '0000000'
@@ -167,33 +167,11 @@ def register_code(x):
     'sp':   '00010',
     'gp':   '00011',
     'tp':   '00100',
-    't0':   '00101',
-    't1':   '00110',
-    't2':   '00111',
-    's0':   '01000',
-    's1':   '01001',
-    'a0':   '01010',
-    'a1':   '01011',
-    'a2':   '01100',
-    'a3':   '01101',
-    'a4':   '01110',
-    'a5':   '01111',
-    'a6':   '10000',
-    'a7':   '10001',
-    's2':   '10010',
-    's3':   '10011',
-    's4':   '10100',
-    's5':   '10101',
-    's6':   '10110',
-    's7':   '10111',
-    's8':   '11000',
-    's9':   '11001',
-    's10':   '11010',
-    's11':   '11011',
-    't3':   '11100',
-    't4':   '11101',
-    't5':   '11110',
-    't6':   '11111',
+    't0':   '00101', 't1':   '00110', 't2':   '00111',
+    's0':   '01000', 's1':   '01001', 's2':   '10010', 's3':   '10011', 's4':   '10100', 's5':   '10101',
+    's6':   '10110', 's7':   '10111', 's8':   '11000', 's9':   '11001', 's10':   '11010', 's11':   '11011',
+    'a0':   '01010', 'a1':   '01011', 'a2':   '01100', 'a3':   '01101', 'a4':   '01110', 'a5':   '01111', 'a6':   '10000', 'a7':   '10001',
+    't3':   '11100', 't4':   '11101', 't5':   '11110', 't6':   '11111',
     }
     if x in registers_dict:
         return registers_dict[x]  
@@ -303,6 +281,100 @@ def processor_labels(assembly):
 # ]
 # expected1 =['ADD R1, R2, R3', 'SUB R4, R5, R6', 'MUL R7, R8, R9', 'BEQ R1, R2, -12']
 # print(processor_labels(assembly1)==expected1) -- > True 
+def logic(opco, inst, count):
+
+    if opco in ['0010011']:
+        # imm_value = imm(inst[3], opco)
+        print("imm_value:", imm(inst[3], opco)) #bekaar mein memory waste ho rahi thi variable banane se
+
+        try:
+            bineq = imm(inst[3],opco) + register_code(inst[2]) + funct3(inst[0]) + register_code(inst[1]) + opco
+            
+            if 'error' in bineq or '-1' in bineq: #error print hojaata agar hota toh isse badiya pehele check karlo
+                error_message = f'at line {count} Invalid Register Name'
+                write_to_bin(error_message)
+                print(error_message)
+                break
+            # elif '-1' in bineq:                                           #ye bhi error print karne ke liye tha same code toh join kardis
+            #     error_message = f'at line {count} Invalid Imm Value'
+            #     write_to_bin(error_message)
+            #     print(error_message)
+            #     break
+
+            print("immideate value",imm(inst[3],opco))
+            print("register code",register_code(inst[2]))
+            print("funct3",funct3(inst[0]))
+            print("register code",register_code(inst[1]))
+            print("opco",opco)
+            print(bineq)
+
+            write_to_bin(bineq + ('\n' if count < len(assembly) else '')) #if else ek hi line mein likhdis
+        except Exception as e:
+            # print('Invalid Instruction')
+            print(e) #abhi error ke liye hai baadmein comment kar dena aur upar wala print uncomment kar dena
+            break
+
+    elif opco in ["0000011"]:
+        # imm_value = imm(inst[3], opco)
+        print("imm_value:", imm(inst[3], opco))
+
+        try:
+            bineq = imm(inst[3],opco) + register_code(inst[2]) + funct3(inst[0]) + register_code(inst[1]) + opco
+            
+            if 'error' in bineq or '-1' in bineq:
+                error_message = f'at line {count} Invalid Register Name'
+                write_to_bin(error_message)
+                print(error_message)
+                break
+            # elif '-1' in bineq:
+            #     error_message = f'at line {count} Invalid Imm Value'
+            #     write_to_bin(error_message)
+            #     print(error_message)
+            #     break
+
+            print("immideate value",imm(inst[3],opco))
+            print("register code",register_code(inst[2]))
+            print("funct3",funct3(inst[0]))
+            print("register code",register_code(inst[1]))
+            print("opco",opco)
+            print(bineq)
+
+            write_to_bin(bineq + ('\n' if count < len(assembly) else ''))
+        except Exception as e:
+            # print('Invalid Instruction')
+            print(e)
+            break
+    
+    elif opco in ['1100111']:
+        # imm_value = imm(inst[3], opco)
+        print("imm_value:", imm(inst[3], opco))
+
+        try:
+            bineq = imm(inst[3],opco) + register_code(inst[2]) + funct3(inst[0]) + register_code(inst[1]) + opco
+            
+            if 'error' in bineq or '-1' in bineq:
+                error_message = f'at line {count} Invalid Register Name'
+                write_to_bin(error_message)
+                print(error_message)
+                break
+            # elif '-1' in bineq:
+            #     error_message = f'at line {count} Invalid Imm Value'
+            #     write_to_bin(error_message)
+            #     print(error_message)
+            #     break
+
+            print("immideate value",imm(inst[3],opco))
+            print("register code",register_code(inst[2]))
+            print("funct3",funct3(inst[0]))
+            print("register code",register_code(inst[1]))
+            print("opco",opco)
+            print(bineq)
+
+            write_to_bin(bineq + ('\n' if count < len(assembly) else ''))
+        except Exception as e:
+            # print('Invalid Instruction')
+            print(e)
+            break
 
 
 fname = file_input
