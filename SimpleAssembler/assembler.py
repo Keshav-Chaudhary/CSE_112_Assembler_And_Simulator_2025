@@ -195,7 +195,7 @@ def conversion_to_bits(num, length):
 # print(converion_to_bits(256,12))
 
 def imm(x, opco):
-    num = int(num)
+    num = int(x) # small typo 
     if opco in ["0000011", "0010011", "1100111"]:
         bit_length = 12
         binary = conversion_to_bits(abs(num), bit_length)
