@@ -28,39 +28,54 @@ def opcode(x):
     J = ['jal']
     U = ['lui', 'auipc']
     
-    opc = {
-        # R Type
+    R_opc = {
         'add': '0110011', 
         'sub': '0110011', 
         'slt': '0110011', 
         'and': '0110011',
         'or': '0110011', 
-        'srl': '0110011', 
+        'srl': '0110011'
+    }
 
-        # I Type
+    I_opc = {
         'lw': '0000011', 
         'addi': '0010011', 
-        'jalr': '1100111',
+        'jalr': '1100111'
+    }
 
-        # S Type
-        'sw': '0100011',
+    S_opc = {
+        'sw': '0100011'
+    }
 
-        # B Type
+    B_opc = {
         'beq': '1100011', 
         'bne': '1100011', 
-        'blt': '1100011', 
+        'blt': '1100011'
+    }
 
-        # J Type
-        'jal': '1101111',
+    J_opc = {
+        'jal': '1101111'
+    }
 
-        # U Type
+    U_opc = {
         'lui': '0110111',
         'auipc': '0010111'
     }
-    
-    if x in opc:
-        return opc[x]
-    return 'error'
+
+    if x in R:
+        return R_opc[x]
+    elif x in I:
+        return I_opc[x]
+    elif x in S:
+        return S_opc[x]
+    elif x in B:
+        return B_opc[x]
+    elif x in J:
+        return J_opc[x]
+    elif x in U:
+        return U_opc[x]
+    else:
+        return 'error'
 
 # def test_opcode():
 #     assert opcode('add') == '0110011'
@@ -68,38 +83,52 @@ def opcode(x):
 #     assert opcode('invalid') == 'error'
 
 def funct3(x):
-    funct3 = {
-        # R Type
+    r_type = {
         'add': '000',
         'sub': '000',
         'slt': '010',
         'srl': '101',
         'or': '110',
-        'and': '111',
+        'and': '111'
+    }
 
-        # I Type
+    i_type = {
         'lw': '010',
         'addi': '000',
-        'jalr': '000',
+        'jalr': '000'
+    }
 
-        # S Type
-        'sw': '010',
+    s_type = {
+        'sw': '010'
+    }
 
-        # B Type
+    b_type = {
         'beq': '000',
         'bne': '001',
-        'blt': '100',
+        'blt': '100'
+    }
 
-        # J Type
-        'jal': '000',
+    j_type = {
+        'jal': '000'
+    }
 
-        # U Type
+    u_type = {
         'lui': '000',
         'auipc': '000'
     }
-    
-    if x in funct3:
-        return funct3[x]
+
+    if x in r_type:
+        return r_type[x]
+    elif x in i_type:
+        return i_type[x]
+    elif x in s_type:
+        return s_type[x]
+    elif x in b_type:
+        return b_type[x]
+    elif x in j_type:
+        return j_type[x]
+    elif x in u_type:
+        return u_type[x]
     return ''
 
 # def test_funct3():
