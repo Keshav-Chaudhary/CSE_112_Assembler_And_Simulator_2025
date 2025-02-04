@@ -445,3 +445,33 @@ while cnt != len(assembly):
         except ValueError as e:
             print(f'Invalid Instruction at line {cnt}: {e}')
             break
+
+    # CASE 5 when opcode is 1100111 and instruction is jalr
+    # Instruction : jalr s2,s1,16
+    # output : 00000001000001001000100101100111
+    if opco == '1100111':
+        print("Executed : ", inst)
+        try:
+            #print(inst[0], inst[1], inst[2],inst[3])
+            imm_value = imm(inst[3],opco)
+            #print(imm_value)
+            imm_value = imm(inst[3],opco)
+            reg1_code = register_code(inst[2])
+            reg2_code = register_code(inst[1]) 
+            funct3_value = funct3(inst[0])
+            bineq = imm_value + reg1_code + funct3_value + reg2_code + opco
+            
+            if 'error' in bineq:
+                write_to_bin('at line', cnt, 'Invalid Register Name')
+                print(f'at line {cnt} Invalid Register Name')
+                break
+            elif '-1' in bineq:
+                write_to_bin('at line', cnt, 'Invalid Imm Value')
+                print(f'at line {cnt} Invalid Imm Value')
+                break
+
+            write_to_bin(bineq + ('\n' if cnt != len(assembly) else ''))
+
+        except ValueError as e:
+            print(f'Invalid Instruction at line {cnt}: {e}')
+            break
