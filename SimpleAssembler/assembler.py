@@ -332,6 +332,7 @@ while cnt != len(assembly):
     # Instruction beq zero,zero,0
     # output : 00000000000000000000000001100011
     if opco == "1100011" and inst == ['beq', 'zero', 'zero', '0']:
+        print("Executed : ", inst)
         try:
             imm_value, imm_type = imm(inst[3], opco)
             reg1_code = register_code(inst[2])
@@ -348,7 +349,6 @@ while cnt != len(assembly):
                 write_to_bin('at line', cnt, 'Invalid Imm Value')
                 print(f'at line {cnt} Invalid Imm Value')
                 break
-            
             write_to_bin(bineq + ('\n' if cnt != len(assembly) else ''))
             
         except ValueError as e:
@@ -358,11 +358,10 @@ while cnt != len(assembly):
     # CASE 2 when opcode is 0010011 and instruction is addi 
     # instruction : addi a0,zero,-5
     # output : 11111111101100000000010100010011
-
     if opco == '0010011':  # Check for a specific opcode
-        imm_value = imm(inst[3], opco)
+        print("Executed : ", inst)
+        # imm_value = imm(inst[3], opco)
         # print("imm_value:", imm_value)
-
         try:
             # Prepare the binary instruction
             bineq = imm(inst[3], opco) + register_code(inst[2]) + funct3(inst[0]) + register_code(inst[1]) + opco
@@ -385,6 +384,7 @@ while cnt != len(assembly):
                 write_to_bin(bineq+ ('\n' if cnt != len(assembly) else ''))
             else:
                 write_to_bin(bineq+ ('\n' if cnt != len(assembly) else ''))
+
         except Exception:
             print('Invalid Instruction')
             break
@@ -394,6 +394,7 @@ while cnt != len(assembly):
     # Instruction : add a0,zero,zero
     # output : 00000000000000000000010100110011
     if opco == '0110011':
+        print("Executed : ", inst)
         try:
             reg1_code = register_code(inst[3])
             reg2_code = register_code(inst[2])
@@ -412,3 +413,35 @@ while cnt != len(assembly):
 
         except ValueError as e:
             print(f'Invalid Instruction at line {cnt}: {e}')
+            break
+
+    # CASE 4 when opcode is 0000011 and instruction is lw
+    # Instruction : lw s2,0(s1)
+    # output : 00000000000010010010010100000011
+    #print(f"Opcode received: '{opco}'")
+    if opco in ['0000011']:
+        print("Executed : ", inst)
+        try:
+            t=inst[2].split('(')
+            #print(type(t))
+            #print(imm(t[0],opco))
+            imm_value = imm(t[0],opco)
+            reg1_code = register_code(inst[1])
+            reg2_code = register_code(t[1].strip(')'))
+            funct3_value = funct3(inst[0])
+            bineq = imm_value + reg1_code + reg2_code + funct3_value + opco
+
+            if 'error' in bineq:
+                write_to_bin('at line', cnt, 'Invalid Register Name')
+                print(f'at line {cnt} Invalid Register Name')
+                break
+            elif '-1' in bineq:
+                write_to_bin('at line', cnt, 'Invalid Imm Value')
+                print(f'at line {cnt} Invalid Imm Value')
+                break
+
+            write_to_bin(bineq + ('\n' if cnt != len(assembly) else ''))
+
+        except ValueError as e:
+            print(f'Invalid Instruction at line {cnt}: {e}')
+            break

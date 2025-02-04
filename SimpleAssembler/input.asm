@@ -1,13 +1,4 @@
 addi a0,zero,-5
-addi a0,zero,-5
-addi a0,zero,-5
-addi a0,zero,-5
 add a0,zero,zero
-sub a1,zero,zero
-slt a2,zero,zero
-sltu a3,zero,zero
-xor a4,zero,zero
-srl a5,zero,zero
-or a6,zero,zero
-and a7,zero,zero
 beq zero,zero,0
+lw s2,0(s1)
