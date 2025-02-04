@@ -389,5 +389,28 @@ while cnt != len(assembly):
             print('Invalid Instruction')
             break
     # To be continued
+    
+    # CASE 3 when opcode is 0110011 and instructions are in [add,sub,slt,srl,or,and] or .....
+    # Instruction : add a0,zero,zero
+    # output : 00000000000000000000010100110011
+    if opco == '0110011':
+        try:
+            reg1_code = register_code(inst[3])
+            reg2_code = register_code(inst[2])
+            reg3_code = register_code(inst[1])
+            funct3_value = funct3(inst[0])
+            funct7_value = funct7(inst[0])
 
+            bineq = funct7_value + reg1_code + reg2_code + funct3_value + reg3_code + opco
+
+            if 'error' in bineq:
+                write_to_bin('at line', cnt, 'Invalid Register Name')
+                print(f'at line {cnt} Invalid Register Name')
+                break
+
+            write_to_bin(bineq + ('\n' if cnt != len(assembly) else ''))
+
+        except ValueError as e:
+            print(f'Invalid Instruction at line {cnt}: {e}')
+            break
 
