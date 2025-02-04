@@ -453,7 +453,6 @@ while cnt != len(assembly):
         print("Executed : ", inst)
         try:
             #print(inst[0], inst[1], inst[2],inst[3])
-            imm_value = imm(inst[3],opco)
             #print(imm_value)
             imm_value = imm(inst[3],opco)
             reg1_code = register_code(inst[2])
