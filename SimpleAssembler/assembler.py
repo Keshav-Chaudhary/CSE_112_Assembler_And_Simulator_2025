@@ -412,5 +412,3 @@ while cnt != len(assembly):
 
         except ValueError as e:
             print(f'Invalid Instruction at line {cnt}: {e}')
-            break
-
