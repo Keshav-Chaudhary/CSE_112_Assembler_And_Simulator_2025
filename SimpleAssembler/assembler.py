@@ -203,60 +203,93 @@ def conversion_to_bits(num, length):
     return binary_str
 # print(converion_to_bits(256,12))
 
+# def imm(x, opco):
+#     num = int(x) # small typo 
+#     if opco in ["0000011", "0010011", "1100111"]:
+#         bit_length = 12
+#         binary = conversion_to_bits(abs(num), bit_length)
+#         if num < 0:
+#             binary = compute_2s_complement(binary, bit_length)
+#         if len(binary) > bit_length:
+#             return '-1'
+#         return binary
+
+#     elif opco in ["1100011"]:
+#         bit_length = 13
+#         binary = conversion_to_bits(abs(num), bit_length)
+#         if num < 0:
+#             binary = compute_2s_complement(binary, bit_length)
+#         if len(binary) > bit_length:
+#             return '-1'
+#         y = binary[0] + binary[2:8]
+#         z = binary[8:12] + binary[1]
+#         return y, z
+
+#     elif opco in ["0110111", "0010111"]:
+#         bit_length = 32
+#         binary = conversion_to_bits(abs(num), bit_length)
+#         if num < 0:
+#             binary = compute_2s_complement(binary, bit_length)
+#         if len(binary) > bit_length:
+#             return '-1'
+#         return binary[:20]
+
+#     elif opco in ["0100011"]:
+#         bit_length = 12
+#         binary = conversion_to_bits(abs(num), bit_length)
+#         if num < 0:
+#             binary = compute_2s_complement(binary, bit_length)
+#         if len(binary) > bit_length:
+#             return '-1'
+#         return binary[:7], binary[7:]
+
+#     elif opco in ["1101111"]:
+#         bit_length = 21
+#         binary = conversion_to_bits(abs(num), bit_length)
+#         if num < 0:
+#             binary = compute_2s_complement(binary, bit_length)
+#         if len(binary) > bit_length:
+#             return '-1'
+#         binary = binary[0] + binary[10:20] + binary[9] + binary[1:9]
+#         return binary
+
+
 def imm(x, opco):
-    num = int(x) # small typo 
+    num = int(x)
+    opco_bit_length = {
+        "0000011": 12, "0010011": 12, "1100111": 12,
+        "1100011": 13,
+        "0110111": 32, "0010111": 32,
+        "0100011": 12,
+        "1101111": 21
+    }
+
+    if opco not in opco_bit_length:
+        return '-1'
+
+    bit_length = opco_bit_length[opco]
+    binary = conversion_to_bits(abs(num), bit_length)
+    if num < 0:
+        binary = compute_2s_complement(binary, bit_length)
+    if len(binary) > bit_length:
+        return '-1'
+
     if opco in ["0000011", "0010011", "1100111"]:
-        bit_length = 12
-        binary = conversion_to_bits(abs(num), bit_length)
-        if num < 0:
-            binary = compute_2s_complement(binary, bit_length)
-        if len(binary) > bit_length:
-            return '-1'
         return binary
 
-    elif opco in ["1100011"]:
-        bit_length = 13
-        binary = conversion_to_bits(abs(num), bit_length)
-        if num < 0:
-            binary = compute_2s_complement(binary, bit_length)
-        if len(binary) > bit_length:
-            return '-1'
+    elif opco == "1100011":
         y = binary[0] + binary[2:8]
         z = binary[8:12] + binary[1]
         return y, z
 
     elif opco in ["0110111", "0010111"]:
-        bit_length = 32
-        binary = conversion_to_bits(abs(num), bit_length)
-        if num < 0:
-            binary = compute_2s_complement(binary, bit_length)
-        if len(binary) > bit_length:
-            return '-1'
         return binary[:20]
 
-    elif opco in ["0100011"]:
-        bit_length = 12
-        binary = conversion_to_bits(abs(num), bit_length)
-        if num < 0:
-            binary = compute_2s_complement(binary, bit_length)
-        if len(binary) > bit_length:
-            return '-1'
+    elif opco == "0100011":
         return binary[:7], binary[7:]
 
-    elif opco in ["1101111"]:
-        bit_length = 21
-        binary = conversion_to_bits(abs(num), bit_length)
-        if num < 0:
-            binary = compute_2s_complement(binary, bit_length)
-        if len(binary) > bit_length:
-            return '-1'
-        binary = binary[0] + binary[10:20] + binary[9] + binary[1:9]
-        return binary
-#print(imm(5, '1101111'))
-#print(imm(3, '1100011'))
-#print(imm(5, '0110111'))
-#print(imm(5, '0100011'))
-#print(imm(5, '1101111'))
+    elif opco == "1101111":
+        return binary[0] + binary[10:20] + binary[9] + binary[1:9]
 
 
 def processor_labels(assembly):
@@ -560,8 +593,8 @@ while cnt != len(assembly):
             else:
                 write_to_bin(bineq + '\n')
 
-        except Exception:
-            print('Invalid Instruction') # in case of jal resolve this error : - jal s0,label2
+        except Exception as e:
+            print('Invalid Instruction', e) # in case of jal resolve this error : - jal s0,label2
             break
     
     # CASE bonus mul , rst , halt , rvrs
