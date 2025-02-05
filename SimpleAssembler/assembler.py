@@ -24,7 +24,7 @@ def opcode(x):
     R = ['add', 'sub', 'slt', 'srl', 'or', 'and']
     I = ['lw', 'addi', 'jalr']
     S = ['sw']
-    B = ['beq', 'bne', 'blt']
+    B = ['beq', 'bne', 'blt', 'bgeu']
     J = ['jal']
     U = ['lui', 'auipc']
     
@@ -50,7 +50,8 @@ def opcode(x):
     B_opc = {
         'beq': '1100011', 
         'bne': '1100011', 
-        'blt': '1100011'
+        'blt': '1100011',
+        'bgeu':'1100011'
     }
 
     J_opc = {
@@ -105,7 +106,8 @@ def funct3(x):
     b_type = {
         'beq': '000',
         'bne': '001',
-        'blt': '100'
+        'blt': '100',
+        'bgeu': '111'
     }
 
     j_type = {
@@ -503,4 +505,32 @@ while cnt != len(assembly):
 
         except ValueError as e:
             print(f'Invalid Instruction at line {cnt}: {e}')
+            break
+
+    # CASE 7 when opcode is 1100011 and instruction are not in ['beq','zero','zero','0']
+    # instruction : bgeu s0,s1,96
+    # 00000110100101000111000001100011
+    if opco in ["1100011"] and inst!=['beq',"zero","zero","0"]:
+        print("Executed : ", inst)
+        try:
+            imm_value,imm_type=imm(inst[3],opco)
+            reg1_code = register_code(inst[1])
+            reg2_code = register_code(inst[2])
+            funct3_value = funct3(inst[0])
+            bineq = imm_value + reg2_code + reg1_code + funct3_value + imm_type + opco
+            if 'error'in bineq:
+                write_to_bin('at line', cnt, 'Invalid Register Name')
+                print('at line', cnt, 'Invalid Register Name')
+                break
+            elif '-1'in bineq:
+                write_to_bin('at line',cnt,'Invalid Imm Value')
+                print('at line',cnt,'Invalid Imm Value')
+                break
+            elif cnt==len(assembly):
+                write_to_bin(bineq)
+            else:
+                write_to_bin(bineq + '\n')
+
+        except Exception:
+            print('Invalid Instruction')
             break
