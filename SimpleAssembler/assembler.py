@@ -256,7 +256,7 @@ def conversion_to_bits(num, length):
 
 def imm(x, opco):
     num = int(x)
-    opco_bit_length = {
+    final = {
         "0000011": 12, "0010011": 12, "1100111": 12,
         "1100011": 13,
         "0110111": 32, "0010111": 32,
@@ -264,15 +264,15 @@ def imm(x, opco):
         "1101111": 21
     }
 
-    if opco not in opco_bit_length:
-        return '-1'
+    if opco not in final:
+        return 'error'
 
-    bit_length = opco_bit_length[opco]
+    bit_length = final[opco]
     binary = conversion_to_bits(abs(num), bit_length)
     if num < 0:
         binary = compute_2s_complement(binary, bit_length)
     if len(binary) > bit_length:
-        return '-1'
+        return 'error'
 
     if opco in ["0000011", "0010011", "1100111"]:
         return binary
