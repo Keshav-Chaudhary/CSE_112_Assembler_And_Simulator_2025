@@ -308,12 +308,12 @@ while cnt != len(assembly):
     # print('Current Line : ', inst)
     cnt += 1
     
-    if inst[0] in ['rst', 'halt']: # bonus insts.
+    if inst[0] in ['rst', 'halt']:
         inst = [inst[0]]
     else:
         inst = [inst[0]] + inst[1].split(',')
     
-    opco = opcode(inst[0]) # give equivalent opcode
+    opco = opcode(inst[0])
 
     if inst[0] in bonus_list:
         opco = bonus_opcodes.get(inst[0], opco)
@@ -329,6 +329,11 @@ while cnt != len(assembly):
     # print(opco) #0010011
     # print(repr(opco))
     # print(len(opco))
+    # Base Case
+    if opco=='error':
+        write_to_bin('at line', cnt,'Invalid Instruction Name')
+        print('at line', cnt,'Invalid Instruction Name')
+        break
 
     # CASE 1 when opcode is 0010011 and instruction is beq 
     # Instruction beq zero,zero,0
@@ -531,6 +536,86 @@ while cnt != len(assembly):
             else:
                 write_to_bin(bineq + '\n')
 
+        except Exception:
+            print('Invalid Instruction')
+            break
+
+    # CASE 8 when opcode is 0110111 or 0010111 or 1101111 and instruction are lui , auipc , jal
+    if opco in ["0110111","0010111","1101111"]:
+        print('Executed : ',inst)
+        try:
+            imm_value=imm(inst[2],opco)
+            reg1_code=register_code(inst[1])
+            bineq=imm_value + reg1_code + opco
+            if 'error'in bineq:
+                write_to_bin('at line', cnt, 'Invalid Register Name')
+                print('at line', cnt, 'Invalid Register Name')
+                break
+            elif '-1'in bineq:
+                write_to_bin('at line',cnt,'Invalid Imm Value')
+                print('at line',cnt,'Invalid Imm Value')
+                break
+            elif cnt==len(assembly):
+                write_to_bin(bineq)
+            else:
+                write_to_bin(bineq + '\n')
+
+        except Exception:
+            print('Invalid Instruction') # in case of jal resolve this error : - jal s0,label2
+            break
+    
+    # CASE bonus mul , rst , halt , rvrs
+    # when instruction is mul
+    if opco == '1010110':
+        try:
+            bineq = '0000000' + register_code(inst[3])+register_code(inst[2])+ '000'+register_code(inst[1])+opco
+            if 'error'in bineq:
+                write_to_bin('at line', cnt, 'Invalid Register Name')
+                print('at line', cnt, 'Invalid Register Name')
+                break
+            elif cnt==len(assembly):
+                write_to_bin(bineq)
+            else:
+                write_to_bin(bineq + '\n')
+        except Exception:
+            print('Invalid Instruction')
+            break
+    # when instruction is rst
+    if opco == '1010101':
+        try:
+            bineq = '0000000000000000000000000' + opco
+            if cnt == len(assembly):
+                
+                write_to_bin(bineq)
+            else:
+                write_to_bin(bineq + '\n')
+        except Exception:
+            print('Invalid Instruction')
+            break
+    # when instruction is halt
+    if opco == '1011101':
+        try:
+            bineq = '0000000000000000000000000' + opco
+            if cnt == len(assembly):
+                
+                write_to_bin(bineq)
+            else:
+                write_to_bin(bineq + '\n')
+        except Exception:
+            print('Invalid Instruction')
+            break
+    #when instruction is rvrs
+    if opco == '1011111':
+        try:
+            bineq = '000000000000' + register_code(inst[2]) + '000' + register_code(inst[1]) + opco
+            if 'error'in bineq:
+                write_to_bin('at line', cnt, 'Invalid Register Name')
+                print('at line', cnt, 'Invalid Register Name')
+                break
+            elif cnt==len(assembly):
+                write_to_bin(bineq)
+            else:
+                write_to_bin(bineq + '\n')
         except Exception:
             print('Invalid Instruction')
             break
