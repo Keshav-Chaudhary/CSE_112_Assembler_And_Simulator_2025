@@ -21,146 +21,70 @@ def read_instructions(pc):
     return temp
 
 def opcode(x):
-    R = ['add', 'sub', 'slt', 'srl', 'or', 'and']
-    I = ['lw', 'addi', 'jalr']
-    S = ['sw']
-    B = ['beq', 'bne', 'blt', 'bgeu']
-    J = ['jal']
-    U = ['lui', 'auipc']
-    
-    R_opc = {
-        'add': '0110011', 
-        'sub': '0110011', 
-        'slt': '0110011', 
-        'and': '0110011',
-        'or': '0110011', 
-        'srl': '0110011'
+    R = ["add", "sub", "sll", "slt", "sltu", "xor", "srl", "or", "and"]
+    I1 = ["lw"]
+    I2 = ["addi", "sltiu"]
+    I3 = ["jalr"]
+    S = ["sw", "sb", "sh", "sd"]
+    B = ["beq", "bne", "blt", "bge", "bltu", "bgeu"]
+    U1 = ["lui"]
+    U2 = ["auipc"]
+    J = ["jal"]
+
+    op = {
+        "add": "0110011", "sub": "0110011", "sll": "0110011", "slt": "0110011", "sltu": "0110011", "xor": "0110011", "srl": "0110011", "or": "0110011", "and": "0110011",
+
+        "lw": "0000011",
+
+        "addi": "0010011", "sltiu": "0010011",
+
+        "jalr": "1100111",
+
+        "sw": "0100011", "sb": "0100011", "sh": "0100011", "sd": "0100011",
+
+        "beq": "1100011", "bne": "1100011", "blt": "1100011", "bge": "1100011", "bltu": "1100011", "bgeu": "1100011",
+
+        "lui": "0110111",
+
+        "auipc": "0010111",
+
+        "jal": "1101111"
     }
 
-    I_opc = {
-        'lw': '0000011', 
-        'addi': '0010011', 
-        'jalr': '1100111'
-    }
-
-    S_opc = {
-        'sw': '0100011'
-    }
-
-    B_opc = {
-        'beq': '1100011', 
-        'bne': '1100011', 
-        'blt': '1100011',
-        'bgeu':'1100011'
-    }
-
-    J_opc = {
-        'jal': '1101111'
-    }
-
-    U_opc = {
-        'lui': '0110111',
-        'auipc': '0010111'
-    }
-
-    if x in R:
-        return R_opc[x]
-    elif x in I:
-        return I_opc[x]
-    elif x in S:
-        return S_opc[x]
-    elif x in B:
-        return B_opc[x]
-    elif x in J:
-        return J_opc[x]
-    elif x in U:
-        return U_opc[x]
-    else:
-        return 'error'
-
-# def test_opcode():
-#     assert opcode('add') == '0110011'
-#     assert opcode('lw') == '0000011'
-#     assert opcode('invalid') == 'error'
+    return op.get(x, 'error')
 
 def funct3(x):
-    r_type = {
-        'add': '000',
-        'sub': '000',
-        'slt': '010',
-        'srl': '101',
-        'or': '110',
-        'and': '111'
+    f3 = {
+        "add": "000", "sub": "000", "addi": "000", "beq": "000", "jalr": "000",
+
+        "sll": "001", "bne": "001",
+
+        "slt": "010", "lw": "010", "sw": "010",
+
+        "sltu": "011", "sltiu": "011",
+
+        "xor": "100", "blt": "100",
+
+        "srl": "101", "bge": "101",
+
+        "or": "110", "bltu": "110",
+
+        "and": "111", "bgeu": "111",
+
+        "lui": "", "auipc": "", "jal": ""
     }
-
-    i_type = {
-        'lw': '010',
-        'addi': '000',
-        'jalr': '000'
-    }
-
-    s_type = {
-        'sw': '010'
-    }
-
-    b_type = {
-        'beq': '000',
-        'bne': '001',
-        'blt': '100',
-        'bgeu': '111'
-    }
-
-    j_type = {
-        'jal': '000'
-    }
-
-    u_type = {
-        'lui': '000',
-        'auipc': '000'
-    }
-
-    if x in r_type:
-        return r_type[x]
-    elif x in i_type:
-        return i_type[x]
-    elif x in s_type:
-        return s_type[x]
-    elif x in b_type:
-        return b_type[x]
-    elif x in j_type:
-        return j_type[x]
-    elif x in u_type:
-        return u_type[x]
-    return 'error'
-
-# def test_funct3():
-#     assert funct3('add') == '000'
-#     assert funct3('lw') == '010'
-#     assert funct3('abcde') == ''
+    return f3.get(x, 'error')
 
 def funct7(x):
     
     f7 = {
-        'add': '0000000',
-        'sub': '0100000',
-        'slt': '0000000',
-        'srl': '0000000',
-        'or': '0000000',
-        'and': '0000000'
+        "add": "0000000", "sll": "0000000", "slt": "0000000", "sltu": "0000000", "xor": "0000000", "srl": "0000000", "or": "0000000", "and": "0000000",
+
+        "sub": "0100000",
+
+        "lw": "", "addi": "", "sltiu": "", "jalr": "", "sw": "", "beq": "", "bne": "", "blt": "", "bge": "", "bltu": "", "bgeu": "", "lui": "", "auipc": "", "jal": ""
     }
-    
-    if x in f7:
-        return f7[x]
-    return 'error'
-
-# def test_funct7():
-#     assert funct7('add') == '0000000'
-#     assert funct7('sub') == '0100000'
-#     assert funct7('invalid') == ''
-
-# test_opcode()
-# test_funct3()
-# test_funct7()
+    return f7.get(x, 'error')
 
 def register_code(x):
     registers_dict={
@@ -201,58 +125,6 @@ def conversion_to_bits(num, length):
     elif len(binary_str) > length:
         binary_str = binary_str[-length:]
     return binary_str
-# print(converion_to_bits(256,12))
-
-# def imm(x, opco):
-#     num = int(x) # small typo 
-#     if opco in ["0000011", "0010011", "1100111"]:
-#         bit_length = 12
-#         binary = conversion_to_bits(abs(num), bit_length)
-#         if num < 0:
-#             binary = compute_2s_complement(binary, bit_length)
-#         if len(binary) > bit_length:
-#             return '-1'
-#         return binary
-
-#     elif opco in ["1100011"]:
-#         bit_length = 13
-#         binary = conversion_to_bits(abs(num), bit_length)
-#         if num < 0:
-#             binary = compute_2s_complement(binary, bit_length)
-#         if len(binary) > bit_length:
-#             return '-1'
-#         y = binary[0] + binary[2:8]
-#         z = binary[8:12] + binary[1]
-#         return y, z
-
-#     elif opco in ["0110111", "0010111"]:
-#         bit_length = 32
-#         binary = conversion_to_bits(abs(num), bit_length)
-#         if num < 0:
-#             binary = compute_2s_complement(binary, bit_length)
-#         if len(binary) > bit_length:
-#             return '-1'
-#         return binary[:20]
-
-#     elif opco in ["0100011"]:
-#         bit_length = 12
-#         binary = conversion_to_bits(abs(num), bit_length)
-#         if num < 0:
-#             binary = compute_2s_complement(binary, bit_length)
-#         if len(binary) > bit_length:
-#             return '-1'
-#         return binary[:7], binary[7:]
-
-#     elif opco in ["1101111"]:
-#         bit_length = 21
-#         binary = conversion_to_bits(abs(num), bit_length)
-#         if num < 0:
-#             binary = compute_2s_complement(binary, bit_length)
-#         if len(binary) > bit_length:
-#             return '-1'
-#         binary = binary[0] + binary[10:20] + binary[9] + binary[1:9]
-#         return binary
-
 
 def imm(x, opco):
     num = int(x)
