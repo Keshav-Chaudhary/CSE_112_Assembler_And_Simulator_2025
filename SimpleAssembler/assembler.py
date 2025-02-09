@@ -165,20 +165,31 @@ def imm(x, opco):
 
 
 def processor_labels(assembly):
-    label_dict = {}
-    
-    for i in range(len(assembly)):
-        assembly[i] = assembly[i].lstrip() 
-        
-        match = re.match(r'(\w+):\s*(.*)', assembly[i])
-        if match:
-            label_dict[match.group(1)] = i * 4
-            assembly[i] = match.group(2)
+    for i in range(0,len(assembly)):
+        assembly[i]=assembly[i].lstrip()
+    dictlabels=dict()
+    for i in range(0,len(assembly)):
+        if ':' in assembly[i]:
+            labelname=''
+            for j in assembly[i]:
+                if(j!=':'):
+                    labelname+=j
+                else:
+                    break
+            dictlabels[labelname]=i*4
+            assembly[i]=assembly[i][assembly[i].index(':')+1:]
+    for i in range(0,len(assembly)):
+        assembly[i]=assembly[i].lstrip()
 
-        for label, address in label_dict.items():
-            if label in assembly[i]:
-                assembly[i] = assembly[i].replace(label, str(address - (i * 4)))
-
+    for i in assembly:
+        for j in dictlabels.keys():
+            if j in i:
+                ind=assembly.index(i)
+                i=i.replace(j,str(dictlabels[j]-(ind*4)))
+                assembly.pop(ind)
+                assembly.insert(ind,i)
+            else:
+                continue
     return assembly
 # assembly1 = [
 #     "label1: ADD R1, R2, R3",
