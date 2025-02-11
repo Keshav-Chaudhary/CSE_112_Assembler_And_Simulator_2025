@@ -5,5 +5,18 @@
 00000001000001001000100101100111
 00000001001001000010000000100011
 00000110100101000111000001100011
+00000110100101000111000001100011
 00000000000000000000010000110111
 00000000000000000000010010010111
+output of previous commit 
+addi a0,zero,-5
+add a0,zero,zero
+beq zero,zero,0
+lw s2,0(s1)
+jalr s2,s1,16
+sw s2,0(s0)
+bgeu s0,s1,96
+bgeu s0,s1,96
+lui s0,20
+auipc s1,40
+jal s0,label2 (in this commit there is issue in this label that is resolved by Ayan bro Badmaasssssss pro max)

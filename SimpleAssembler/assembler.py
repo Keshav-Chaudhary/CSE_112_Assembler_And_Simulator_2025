@@ -1,26 +1,48 @@
 import sys # for command line arguments
-import re
-file_input = sys.argv[1] # input file
-file_output = sys.argv[2] # output file 
+# import re
+file_input = sys.argv[1] # Input file containing assembly code
+file_output = sys.argv[2]  # Output file to store binary machine code
 # RISC-V encoding format
 # [31:25] [24:20] [19:15] [14:12] [11:7] [6:0] Instruction
 # funct7 s3 s2 add s1 opcode add
 # 0000000 10011 10010 000 01001 0110011
 
-def write_to_bin(bineq): 
+def write_to_bin(bineq):
+    """
+    Appends binary code to the output file.
+    Args:
+        bineq (str): Binary string to write to the file.
+    """ 
     bincode = open(file_output, '+a')
     bincode.write(str(bineq))
     bincode.close()
 
 def ovr_write_to_bin():
+    """
+    Clears the output file before writing new binary code.
+    """
     bincode = open(file_output, '+w')
     bincode.close()
 
 def read_instructions(pc): 
+    """
+    Reads an instruction from the assembly code at the given program counter (PC).
+    Args:
+        pc (int): Program counter (index of the instruction in the assembly list).
+    Returns:
+        str: The instruction at the specified PC.
+    """
     temp = assembly[pc]
     return temp
 
 def opcode(x):
+    """
+    Returns the opcode for a given instruction.
+    Args:
+        x (str): Instruction name (e.g., "add", "lw").
+    Returns:
+        str: Corresponding opcode.
+    """
     R = ["add", "sub", "sll", "slt", "sltu", "xor", "srl", "or", "and"]
     I1 = ["lw"]
     I2 = ["addi", "sltiu"]
@@ -32,50 +54,66 @@ def opcode(x):
     J = ["jal"]
 
     op = {
+        # R-Type
         "add": "0110011", "sub": "0110011", "sll": "0110011", "slt": "0110011", "sltu": "0110011", "xor": "0110011", "srl": "0110011", "or": "0110011", "and": "0110011",
-
+        # I-Type
         "lw": "0000011",
-
+        # I-Type
         "addi": "0010011", "sltiu": "0010011",
-
+        # I-Type
         "jalr": "1100111",
-
+        # S-Type
         "sw": "0100011", "sb": "0100011", "sh": "0100011", "sd": "0100011",
-
+        # B-Type
         "beq": "1100011", "bne": "1100011", "blt": "1100011", "bge": "1100011", "bltu": "1100011", "bgeu": "1100011",
-
+        # U-Type
         "lui": "0110111",
-
+        # U-Type
         "auipc": "0010111",
-
+        # J-Type
         "jal": "1101111"
     }
 
     return op.get(x, 'error')
 
 def funct3(x):
+    """
+    Returns the funct3 code for a given instruction.
+    Args:
+        x (str): Instruction name.
+    Returns:
+        str: Corresponding funct3 code.
+    """
     f3 = {
+        # R-Type
         "add": "000", "sub": "000", "addi": "000", "beq": "000", "jalr": "000",
-
+        # I-Type
         "sll": "001", "bne": "001",
-
+        # S-Type
         "slt": "010", "lw": "010", "sw": "010",
-
+        # B-Type
         "sltu": "011", "sltiu": "011",
-
+        # U-Type
         "xor": "100", "blt": "100",
-
+        # J-Type
         "srl": "101", "bge": "101",
-
+        # R-Type Bonus
         "or": "110", "bltu": "110",
-
+        # R-Type Bonus
         "and": "111", "bgeu": "111",
-
+        # U-Type
         "lui": "", "auipc": "", "jal": ""
     }
     return f3.get(x, 'error')
 
 def funct7(x):
+    """
+    Returns the funct7 code for a given instruction.
+    Args:
+        x (str): Instruction name.
+    Returns:
+        str: Corresponding funct7 code.
+    """
     
     f7 = {
         "add": "0000000", "sll": "0000000", "slt": "0000000", "sltu": "0000000", "xor": "0000000", "srl": "0000000", "or": "0000000", "and": "0000000",
@@ -87,6 +125,13 @@ def funct7(x):
     return f7.get(x, 'error')
 
 def register_code(x):
+    """
+    Returns the binary code for a given register.
+    Args:
+        x (str): Register name (e.g., "zero", "s0").
+    Returns:
+        str: Corresponding 5-bit binary code.
+    """
     registers_dict={
     'zero': '00000',
     'ra':   '00001',
@@ -106,12 +151,28 @@ def register_code(x):
 
 
 def compute_2s_complement(binary_str, length):
+    """
+    Computes the 2's complement of a binary string.
+    Args:
+        binary_str (str): Binary string.
+        length (int): Desired length of the output binary string.
+    Returns:
+        str: 2's complement of the input binary string.
+    """
     flipped = ''.join('1' if bit == '0' else '0' for bit in binary_str)
     binary = bin(int(flipped, 2) + 1)[2:] 
     return binary.zfill(length)
 #print(compute_2s_complement((conversion_to_bits(256,12)),10))
 
 def conversion_to_bits(num, length):
+    """
+    Converts a number to a binary string of the specified length.
+    Args:
+        num (int): Number to convert.
+        length (int): Desired length of the binary string.
+    Returns:
+        str: Binary representation of the number.
+    """
     if num == 0:
         return "0" * length 
     bits = []
@@ -127,6 +188,14 @@ def conversion_to_bits(num, length):
     return binary_str
 
 def imm(x, opco):
+    """
+    Computes the immediate value for an instruction.
+    Args:
+        x (str): Immediate value as a string.
+        opco (str): Opcode of the instruction.
+    Returns:
+        str: Binary representation of the immediate value.
+    """
     num = int(x)
     final = {
         "0000011": 12, "0010011": 12, "1100111": 12,
@@ -165,6 +234,13 @@ def imm(x, opco):
 
 
 def processor_labels(assembly):
+    """
+    Processes labels in the assembly code and replaces them with their corresponding addresses.
+    Args:
+        assembly (list): List of assembly instructions.
+    Returns:
+        list: Processed assembly instructions with labels replaced by addresses.
+    """
     for i in range(0,len(assembly)):
         assembly[i]=assembly[i].lstrip()
     dictlabels=dict()
@@ -349,10 +425,10 @@ while cnt != len(assembly):
             #print(type(t))
             #print(imm(t[0],opco))
             imm_value = imm(t[0],opco)
-            reg1_code = register_code(inst[1])
+            reg1_code = register_code(inst[1])  # Error Resolved of the Register interplaced and rearranging the fucnt3 values
             reg2_code = register_code(t[1].strip(')'))
             funct3_value = funct3(inst[0])
-            bineq = imm_value + reg1_code + reg2_code + funct3_value + opco
+            bineq = imm_value + reg2_code +funct3_value + reg1_code + opco
 
             if 'error' in bineq:
                 write_to_bin('at line', cnt, 'Invalid Register Name')
